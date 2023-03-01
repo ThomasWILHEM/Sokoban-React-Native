@@ -6,17 +6,26 @@ const Board = (props) => {
 
     const [swipeDirection, setSwipeDirection] = useState('');
     const [board, setBoard] = useState(props.board);
+    const [swipeHandled, setSwipeHandled] = useState(false);
+
+    const handleSwipe = () => {
+        if (!swipeHandled) {
+            // Ici, on traite le geste de swipe
+            setSwipeHandled(true);
+        }
+    };
+
 
     const panResponder = useRef(
         PanResponder.create({
             onStartShouldSetPanResponder: () => true,
-            onPanResponderMove: () => setSwipeDirection(''),
-            onPanResponderRelease: (evt, gestureState) => {
+            onPanResponderRelease:(evt, gestureState) => {
                 const { dx, dy } = gestureState;
                 if (Math.abs(dx) > Math.abs(dy)) {
                     setSwipeDirection(dx > 0 ? 'right' : 'left');
+                    handleSwipe();
                     if(dx > 0){
-
+                        setPlayerPostition(4,5);
                     }
                     else{
 
@@ -25,18 +34,30 @@ const Board = (props) => {
                 } else {
                     setSwipeDirection(dy > 0 ? 'down' : 'up');
                 }
-    }
+            },
         })
     ).current;
 
     const getPlayerPostition = () =>{
         board.forEach((row,rowIndex) =>{
             row.forEach((cell,cellIndex) => {
-                if(cell === "P")
-                    return [rowIndex,cellIndex];
-            })
+                if(cell === "P") {
+                    return [rowIndex, cellIndex];
+                }
+            });
         });
+        return null;
     }
+
+    const setPlayerPostition = (nextX,nextY) =>{
+        const playerPosition = getPlayerPostition();
+        if(playerPosition !== null){
+            board[playerPosition[0], playerPosition[1]] = ".";
+            board[playerPosition[nextX], playerPosition[nextY]] = "P";
+            setBoard(board);
+        }
+    }
+
 
     const getObjectToPosition = (rowIndex, cellIndex) => {
         return board[rowIndex][cellIndex];
