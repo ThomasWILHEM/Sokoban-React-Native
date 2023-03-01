@@ -1,46 +1,46 @@
-import {Image, StyleSheet, Text, ToastAndroid, View} from "react-native";
-import React from "react";
-import GestureRecognizer from "react-native-swipe-gestures";
+import {Image, StyleSheet, Text, PanResponder, View} from "react-native";
+import React, {useRef, useState} from "react";
+import Player from "./Player";
 
 const Board = (props) => {
 
-    const handleSwipe = (gestureState) => {
+    const [swipeDirection, setSwipeDirection] = useState('');
 
-        switch (gestureState.direction) {
-            case "SWIPE_LEFT":
-                console.log("Swiped left");
-                break;
-            case "SWIPE_RIGHT":
-                console.log("Swiped right");
-                break;
-            case "SWIPE_UP":
-                console.log("Swiped up");
-                break;
-            case "SWIPE_DOWN":
-                console.log("Swiped down");
-                break;
-        }
-    };
+    const panResponder = useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onPanResponderMove: (evt, gestureState) => {
+                const { dx, dy } = gestureState;
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    setSwipeDirection(dx > 0 ? 'right' : 'left');
+                } else {
+                    setSwipeDirection(dy > 0 ? 'down' : 'up');
+                }
+            },
+            onPanResponderRelease: () => setSwipeDirection(''),
+        })
+    ).current;
+
 
     return (
-        <GestureRecognizer onSwipe={handleSwipe}>
-        <View style={styles.container}>
-            {props.board.map((row, rowIndex) => (
-                <View key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                        <View key={cellIndex} style={[styles.cell, cell === '#' && styles.wall]}>
-                            {cell === '.' && <Image source={require("../assets/background.png")}/>}
-                            {cell === '#' && <Image source={require("../assets/wall.png")}/>}
-                            {cell === 'P' && <Image source={require("../assets/character.png")}/>}
-                            {cell === 'B' && <Image source={require("../assets/box.png")}/>}
-                            {cell === 'X' && <Image source={require("../assets/cible.png")}/>}
-                        </View>
-                    ))}
-                </View>
-            ))}
+        <View  {...panResponder.panHandlers}>
+            <View style={styles.container} >
+                {props.board.map((row, rowIndex) => (
+                    <View key={rowIndex}>
+                        {row.map((cell, cellIndex) => (
+                            <View key={cellIndex} style={[styles.cell, cell === '#' && styles.wall]}>
+                                {cell === '.' && <Image source={require("../assets/background.png")}/>}
+                                {cell === '#' && <Image source={require("../assets/wall.png")}/>}
+                                {cell === 'P' && <Player/> }
+                                {cell === 'B' && <Image source={require("../assets/box.png")}/>}
+                                {cell === 'X' && <Image source={require("../assets/cible.png")}/>}
+                            </View>
+                        ))}
+                    </View>
+                ))}
+            </View>
+            <Text style={styles.text}>{swipeDirection}</Text>
         </View>
-        </GestureRecognizer>
-
     );
 }
 
