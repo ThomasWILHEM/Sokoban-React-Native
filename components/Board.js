@@ -1,6 +1,9 @@
 import {Image, StyleSheet, Text, PanResponder, View} from "react-native";
 import React, {useRef, useState} from "react";
 import Player from "./Player";
+import Wall from "./Wall";
+import Box from "./Box";
+import Target from "./Target";
 
 const Board = (props) => {
 
@@ -71,10 +74,10 @@ const Board = (props) => {
                         {row.map((cell, cellIndex) => (
                             <View key={cellIndex} style={[styles.cell, cell === '#' && styles.wall]}>
                                 {cell === '.' && <Image source={require("../assets/background.png")}/>}
-                                {cell === '#' && <Image source={require("../assets/wall.png")}/>}
+                                {cell === '#' && <Wall source={require("../assets/wall.png")}/>}
                                 {cell === 'P' && <Player cords={[rowIndex,cellIndex]}/>}
-                                {cell === 'B' && <Image source={require("../assets/box.png")}/>}
-                                {cell === 'X' && <Image source={require("../assets/cible.png")}/>}
+                                {cell === 'B' && <Box source={require("../assets/box.png")}/>}
+                                {cell === 'X' && <Target source={require("../assets/cible.png")}/>}
                             </View>
                         ))}
                     </View>
