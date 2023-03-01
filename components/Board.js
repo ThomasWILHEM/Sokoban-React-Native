@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, PanResponder, View, ToastAndroid} from "react-native";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Player from "./Player";
 import Wall from "./Wall";
 import Box from "./Box";
@@ -10,6 +10,9 @@ const Board = (props) => {
     const [swipeDirection, setSwipeDirection] = useState('');
     const [board, setBoard] = useState(props.board);
     const [swipeHandled, setSwipeHandled] = useState(false);
+    const [nextX, setNextX] = useState(4);
+    const [nextY, setNextY] = useState(4);
+
 
     const handleSwipe = () => {
         if (!swipeHandled) {
@@ -27,28 +30,30 @@ const Board = (props) => {
                 if (Math.abs(dx) > Math.abs(dy)) {
                     setSwipeDirection(dx > 0 ? 'right' : 'left');
                     handleSwipe();
-                    if(dx > 0) {
-                        setPlayerPostition(6,6);
-                    } else {
-
-                    }
+                    if(dx > 0) setNextX(nextX => nextX + 1);
+                    else setNextX(nextX => nextX - 1);
 
                 } else {
+                    if (dy > 0) setNextY(nextY => nextY + 1);
+                    else setNextY(nextY => nextY - 1);
                     setSwipeDirection(dy > 0 ? 'down' : 'up');
                 }
+                setPlayerPostition();
             },
         })
     ).current;
 
-
-
-    const setPlayerPostition = (nextX, nextY) => {
+    const setPlayerPostition = () => {
         board.forEach((row,rowIndex) =>{
             row.forEach((cell,cellIndex) => {
                 if(cell === "P") {
-                    ToastAndroid.show('pos: ' + rowIndex, ToastAndroid.SHORT);
-                    // return [rowIndex, cellIndex];
-                    board[rowIndex][cellIndex] = ".";
+
+                    setNextX(nextX => nextX + 1);
+
+                    // POURQUOI çA ME DONNE QUE LA VALEUR DE DéPART ????
+                    ToastAndroid.show('pos: ' + nextX, ToastAndroid.SHORT);
+
+                    board[rowIndex][cellIndex] = '.';
                     board[nextX][nextY] = 'P';
                     setBoard(board);
                 }
@@ -79,6 +84,8 @@ const Board = (props) => {
                 ))}
             </View>
             <Text style={styles.text}>{swipeDirection}</Text>
+            <Text style={styles.text}>{nextX}</Text>
+            <Text style={styles.text}>{nextY}</Text>
         </View>
     );
 }
