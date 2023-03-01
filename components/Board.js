@@ -48,8 +48,6 @@ const Board = (props) => {
             row.forEach((cell,cellIndex) => {
                 if(cell === "P") {
 
-                    setNextX(nextX => nextX + 1);
-
                     // POURQUOI çA ME DONNE QUE LA VALEUR DE DéPART ????
                     ToastAndroid.show('pos: ' + nextX, ToastAndroid.SHORT);
 
