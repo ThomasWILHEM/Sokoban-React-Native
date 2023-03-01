@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, PanResponder, View} from "react-native";
+import {Image, StyleSheet, Text, PanResponder, View, ToastAndroid} from "react-native";
 import React, {useRef, useState} from "react";
 import Player from "./Player";
 import Wall from "./Wall";
@@ -27,10 +27,9 @@ const Board = (props) => {
                 if (Math.abs(dx) > Math.abs(dy)) {
                     setSwipeDirection(dx > 0 ? 'right' : 'left');
                     handleSwipe();
-                    if(dx > 0){
-                        setPlayerPostition(4,5);
-                    }
-                    else{
+                    if(dx > 0) {
+                        setPlayerPostition(6,6);
+                    } else {
 
                     }
 
@@ -41,24 +40,20 @@ const Board = (props) => {
         })
     ).current;
 
-    const getPlayerPostition = () =>{
+
+
+    const setPlayerPostition = (nextX, nextY) => {
         board.forEach((row,rowIndex) =>{
             row.forEach((cell,cellIndex) => {
                 if(cell === "P") {
-                    return [rowIndex, cellIndex];
+                    ToastAndroid.show('pos: ' + rowIndex, ToastAndroid.SHORT);
+                    // return [rowIndex, cellIndex];
+                    board[rowIndex][cellIndex] = ".";
+                    board[nextX][nextY] = 'P';
+                    setBoard(board);
                 }
             });
         });
-        return null;
-    }
-
-    const setPlayerPostition = (nextX,nextY) =>{
-        const playerPosition = getPlayerPostition();
-        if(playerPosition !== null){
-            board[playerPosition[0], playerPosition[1]] = ".";
-            board[playerPosition[nextX], playerPosition[nextY]] = "P";
-            setBoard(board);
-        }
     }
 
 
