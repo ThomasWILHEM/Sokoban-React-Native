@@ -1,9 +1,23 @@
-import {Image, StyleSheet, Text, View} from "react-native";
+import {Image, StyleSheet, Text, ToastAndroid, View} from "react-native";
 import React from "react";
 
 const Board = (props) => {
     return (
-        <View style={styles.container}>
+        <View style={styles.container}
+              onTouchStart={e=> {
+                  this.touchY = e.nativeEvent.pageY;
+                  this.touchX = e.nativeEvent.pageX;
+              }}
+              onTouchEnd={e => {
+                  if (this.touchY - e.nativeEvent.pageY > 20)
+                      ToastAndroid.show('up', ToastAndroid.SHORT);
+                  if (this.touchY - e.nativeEvent.pageY < -20)
+                      ToastAndroid.show('down', ToastAndroid.SHORT);
+                  if (this.touchX - e.nativeEvent.pageX > 20)
+                      ToastAndroid.show('left', ToastAndroid.SHORT);
+                  if (this.touchX - e.nativeEvent.pageX < -20)
+                      ToastAndroid.show('right', ToastAndroid.SHORT);
+              }}>
             {props.board.map((row, rowIndex) => (
                 <View key={rowIndex}>
                     {row.map((cell, cellIndex) => (
