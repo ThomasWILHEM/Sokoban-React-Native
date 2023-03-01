@@ -9,6 +9,7 @@ const Board = (props) => {
                     {row.map((cell, cellIndex) => (
                         <Text key={cellIndex} style={[styles.cell, cell === '#' && styles.wall]}>
                             {cell === '.' && <Image source={require("../assets/background.png")}/>}
+                            {cell === '#' && <Image source={require("../assets/wall.png")}/>}
                             {cell === 'P' && <Image source={require("../assets/character.png")}/>}
                             {cell === 'B' && <Image source={require("../assets/box.png")}/>}
                             {cell === 'X' && <Image source={require("../assets/cible.png")}/>}
