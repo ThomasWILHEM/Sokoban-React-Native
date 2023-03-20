@@ -10,8 +10,8 @@ const Board = (props) => {
     const [swipeDirection, setSwipeDirection] = useState('');
     const [board, setBoard] = useState(props.board);
     const [swipeHandled, setSwipeHandled] = useState(false);
-    const [nextX, setNextX] = useState(4);
-    const [nextY, setNextY] = useState(4);
+    let [nextX, setNextX] = useState(4);
+    let [nextY, setNextY] = useState(4);
 
 
     const handleSwipe = () => {
@@ -21,6 +21,10 @@ const Board = (props) => {
         }
     };
 
+
+    useEffect(() => {
+        setPlayerPosition(nextX, nextY);
+    }, [nextX, nextY]);
 
     const panResponder = useRef(
         PanResponder.create({
@@ -38,31 +42,42 @@ const Board = (props) => {
                     else setNextY(nextY => nextY - 1);
                     setSwipeDirection(dy > 0 ? 'down' : 'up');
                 }
-                setPlayerPostition();
             },
         })
     ).current;
 
-    const setPlayerPostition = () => {
-        board.forEach((row,rowIndex) =>{
-            row.forEach((cell,cellIndex) => {
-                if(cell === "P") {
-
-                    // POURQUOI çA ME DONNE QUE LA VALEUR DE DéPART ????
-                    ToastAndroid.show('pos: ' + nextX, ToastAndroid.SHORT);
-
-                    board[rowIndex][cellIndex] = '.';
-                    board[nextX][nextY] = 'P';
-                    setBoard(board);
+    const setPlayerPosition = (nextX, nextY) => {
+        let currentPlayerPosition = null;
+        const newBoard = board.map((row, rowIndex) => {
+            return row.map((cell, cellIndex) => {
+                if (cell === "P") {
+                    currentPlayerPosition = { x: rowIndex, y: cellIndex };
                 }
+                return cell;
             });
         });
-    }
+        if(newBoard[nextX][nextY] == "#"){
+            newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = "P";
+            setNextX(nextX => currentPlayerPosition.x);
+            setNextY(nextY => currentPlayerPosition.y);
+        }
+        else if(newBoard[nextX][nextY] == "B"){
+            //methodeBoxmouvement en fonction postion joueur
+        }
+        else if(newBoard[nextX][nextY] == "X"){
+            //Methode qui reAjoute la case X une fois que le joueur est repartis
+        }
+        else{
+            newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
+            newBoard[nextX][nextY] = "P";
+        }
+        setBoard(newBoard);
+    };
 
 
     const getObjectToPosition = (rowIndex, cellIndex) => {
         return board[rowIndex][cellIndex];
-    }
+    };
 
     return (
         <View  {...panResponder.panHandlers}>
@@ -81,6 +96,7 @@ const Board = (props) => {
                     </View>
                 ))}
             </View>
+            <Text style={styles.text}>{board}</Text>
             <Text style={styles.text}>{swipeDirection}</Text>
             <Text style={styles.text}>{nextX}</Text>
             <Text style={styles.text}>{nextY}</Text>
