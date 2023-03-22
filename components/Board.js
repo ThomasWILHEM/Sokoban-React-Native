@@ -10,6 +10,7 @@ const Board = (props) => {
 
     const [swipeDirection, setSwipeDirection] = useState('');
     const [board, setBoard] = useState(props.board);
+    const [targets, setTargets] = useState([])
     const [swipeHandled, setSwipeHandled] = useState(false);
     let [nextX, setNextX] = useState(4);
     let [nextY, setNextY] = useState(4);
@@ -22,6 +23,13 @@ const Board = (props) => {
         }
     };
 
+    const checkWin = (newBoard) =>
+    {
+        const thereIsAnX = newBoard.find(subArray => subArray.includes("X"));
+        if (!thereIsAnX) {
+            console.log('Victoire');
+        }
+    }
 
     useEffect(() => {
         setPlayerPosition(nextX, nextY);
@@ -63,26 +71,28 @@ const Board = (props) => {
             setNextY(nextY => currentPlayerPosition.y);
         }
         else if(newBoard[nextX][nextY] == "B"){
-            if(swipeDirection === "up" && newBoard[nextX][nextY-1] === "."){
+            if(swipeDirection === "up" && (newBoard[nextX][nextY-1] !== "#" && newBoard[nextX][nextY-1] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
                 newBoard[nextX][nextY-1] = "B";
             }
-            else if(swipeDirection === "down" && newBoard[nextX][nextY+1] === "."){
+            else if(swipeDirection === "down" && (newBoard[nextX][nextY+1] !== "#" && newBoard[nextX][nextY+1] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
                 newBoard[nextX][nextY+1] = "B";
             }
-            else if(swipeDirection === "left" && newBoard[nextX-1][nextY] === "."){
+            else if(swipeDirection === "left" && (newBoard[nextX-1][nextY] !== "#" && newBoard[nextX-1][nextY] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
                 newBoard[nextX-1][nextY] = "B";
             }
-            else if(swipeDirection === "right" && newBoard[nextX+1][nextY] === "."){
+            else if(swipeDirection === "right" && (newBoard[nextX+1][nextY] !== "#" && newBoard[nextX+1][nextY] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
                 newBoard[nextX+1][nextY] = "B";
-            }        }
+            }
+            checkWin(newBoard)
+        }
         else if(newBoard[nextX][nextY] == "X"){
             //Methode qui reAjoute la case X une fois que le joueur est repartis
         }
