@@ -4,6 +4,7 @@ import Player from "./Player";
 import Wall from "./Wall";
 import Box from "./Box";
 import Target from "./Target";
+import Vide from "./Vide";
 
 const Board = (props) => {
 
@@ -109,6 +110,7 @@ const Board = (props) => {
                                 {cell === 'P' && <Player cords={[rowIndex,cellIndex]}/>}
                                 {cell === 'B' && <Box source={require("../assets/box.png")}/>}
                                 {cell === 'X' && <Target source={require("../assets/cible.png")}/>}
+                                {cell === '@' && <Vide source={require("../assets/vide.png")}/>}
                             </View>
                         ))}
                     </View>
