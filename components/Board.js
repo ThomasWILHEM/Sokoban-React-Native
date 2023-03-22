@@ -14,6 +14,7 @@ const Board = (props) => {
     const [swipeHandled, setSwipeHandled] = useState(false);
     let [nextX, setNextX] = useState(4);
     let [nextY, setNextY] = useState(4);
+    let [isCroix, setIsCroix] = useState(0);
 
 
     const handleSwipe = () => {
@@ -30,6 +31,29 @@ const Board = (props) => {
             console.log('Victoire');
         }
     }
+    const CheckCroix = (newBoard,PositionX,PositionY,currentPlayerPosition) =>{
+        if(isCroix === 0){
+            newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
+            newBoard[PositionX][PositionY] = "P";
+            setIsCroix(isCroix = 1);
+        }
+        else {
+            newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = "X";
+            newBoard[nextX][nextY] = "P";
+            setIsCroix(isCroix = 0);
+        }
+    };
+    const CheckCroixCaseVide = (newBoard,PositionX,PositionY,currentPlayerPosition) =>{
+        if(isCroix === 0){
+            newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
+            newBoard[PositionX][PositionY] = "P";
+        }
+        else {
+            newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = "X";
+            newBoard[nextX][nextY] = "P";
+            setIsCroix(isCroix = 0);
+        }
+    };
 
     useEffect(() => {
         setPlayerPosition(nextX, nextY);
@@ -65,12 +89,12 @@ const Board = (props) => {
                 return cell;
             });
         });
-        if(newBoard[nextX][nextY] == "#"){
+        if(newBoard[nextX][nextY] === "#"){
             newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = "P";
             setNextX(nextX => currentPlayerPosition.x);
             setNextY(nextY => currentPlayerPosition.y);
         }
-        else if(newBoard[nextX][nextY] == "B"){
+        else if(newBoard[nextX][nextY] === "B"){
             if(swipeDirection === "up" && (newBoard[nextX][nextY-1] !== "#" && newBoard[nextX][nextY-1] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
@@ -93,12 +117,11 @@ const Board = (props) => {
             }
             checkWin(newBoard)
         }
-        else if(newBoard[nextX][nextY] == "X"){
-            //Methode qui reAjoute la case X une fois que le joueur est repartis
+        else if(newBoard[nextX][nextY] === "X"){
+            CheckCroix(newBoard,nextX,nextY,currentPlayerPosition);
         }
         else{
-            newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
-            newBoard[nextX][nextY] = "P";
+            CheckCroixCaseVide(newBoard,nextX,nextY,currentPlayerPosition);
         }
         setBoard(newBoard);
     };
