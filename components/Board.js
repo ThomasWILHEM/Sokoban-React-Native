@@ -62,8 +62,26 @@ const Board = (props) => {
             setNextY(nextY => currentPlayerPosition.y);
         }
         else if(newBoard[nextX][nextY] == "B"){
-            //methodeBoxmouvement en fonction postion joueur
-        }
+            if(swipeDirection === "up" && newBoard[nextX][nextY-1] === "."){
+                newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
+                newBoard[nextX][nextY] = "P";
+                newBoard[nextX][nextY-1] = "B";
+            }
+            else if(swipeDirection === "down" && newBoard[nextX][nextY+1] === "."){
+                newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
+                newBoard[nextX][nextY] = "P";
+                newBoard[nextX][nextY+1] = "B";
+            }
+            else if(swipeDirection === "left" && newBoard[nextX-1][nextY] === "."){
+                newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
+                newBoard[nextX][nextY] = "P";
+                newBoard[nextX-1][nextY] = "B";
+            }
+            else if(swipeDirection === "right" && newBoard[nextX+1][nextY] === "."){
+                newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
+                newBoard[nextX][nextY] = "P";
+                newBoard[nextX+1][nextY] = "B";
+            }        }
         else if(newBoard[nextX][nextY] == "X"){
             //Methode qui reAjoute la case X une fois que le joueur est repartis
         }
