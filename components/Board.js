@@ -29,6 +29,7 @@ const Board = (props) => {
         const thereIsAnX = newBoard.find(subArray => subArray.includes("X"));
         if (!thereIsAnX) {
             console.log('Victoire');
+            props.onGameOver();
         }
     }
     const CheckCroix = (newBoard,PositionX,PositionY,currentPlayerPosition) =>{
