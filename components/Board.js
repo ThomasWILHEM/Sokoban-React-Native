@@ -96,26 +96,41 @@ const Board = (props) => {
             setNextY(nextY => currentPlayerPosition.y);
         }
         else if(newBoard[nextX][nextY] === "B"){
+
+            let boxMoved = false;
+            
             if(swipeDirection === "up" && (newBoard[nextX][nextY-1] !== "#" && newBoard[nextX][nextY-1] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
                 newBoard[nextX][nextY-1] = "B";
+                boxMoved = true;
             }
             else if(swipeDirection === "down" && (newBoard[nextX][nextY+1] !== "#" && newBoard[nextX][nextY+1] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
                 newBoard[nextX][nextY+1] = "B";
+                boxMoved = true;
             }
             else if(swipeDirection === "left" && (newBoard[nextX-1][nextY] !== "#" && newBoard[nextX-1][nextY] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
                 newBoard[nextX-1][nextY] = "B";
+                boxMoved = true;
             }
             else if(swipeDirection === "right" && (newBoard[nextX+1][nextY] !== "#" && newBoard[nextX+1][nextY] !== "B")){
                 newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
                 newBoard[nextX][nextY] = "P";
                 newBoard[nextX+1][nextY] = "B";
+                boxMoved = true;
             }
+            if (boxMoved) {
+                newBoard[currentPlayerPosition.x][currentPlayerPosition.y] = ".";
+                newBoard[nextX][nextY] = "P";
+            } else {
+                setNextX(nextX => currentPlayerPosition.x);
+                setNextY(nextY => currentPlayerPosition.y);
+            }
+                        
             checkWin(newBoard)
         }
         else if(newBoard[nextX][nextY] === "X"){
